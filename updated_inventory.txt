@@ -1,0 +1,16 @@
+Product: Laptop
+Price: $799.99
+ID: 101
+In stock: 13
+Product: Smartphone
+Price: $499.99
+ID: 102
+In stock: 15
+Product: Samsung s24 ultra
+Price: $999.99
+ID: 105
+In stock: 15
+Product: iPhone 15 pro max
+Price: $999.99
+ID: 107
+In stock: 12
