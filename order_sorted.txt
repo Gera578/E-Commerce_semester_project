@@ -1,0 +1,42 @@
+Category Name
+10
+The Last of Us Part II (PS4)
+$39.99
+180
+---------------
+Xbox Wireless Controller
+$59.99
+150
+---------------
+Cyberpunk 2077 (PS5)
+$59.99
+200
+---------------
+Call of Duty: Modern Warfare II (Xbox Series X)
+$59.99
+300
+---------------
+Gaming Mouse Razer DeathAdder
+$69.99
+100
+---------------
+PlayStation DualSense Wireless Controller
+$69.99
+120
+---------------
+Gaming Keyboard Logitech G Pro
+$129.99
+75
+---------------
+Nintendo Switch
+$299.99
+50
+---------------
+Xbox Series X
+$499.99
+25
+---------------
+PlayStation 5
+$499.99
+30
+---------------

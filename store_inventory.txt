@@ -1,0 +1,12 @@
+Product: Laptop
+Price: $1200.99
+ID: 101
+In stock: 10
+Product: Phone
+Price: $699.49
+ID: 102
+In stock: 25
+Product: Tablet
+Price: $299.99
+ID: 103
+In stock: 15

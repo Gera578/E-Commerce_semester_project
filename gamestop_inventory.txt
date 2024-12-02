@@ -1,0 +1,49 @@
+Product: Xbox Series X
+Price: $499.99
+ID: 101
+Quantity: 25
+
+Product: PlayStation 5
+Price: $499.99
+ID: 102
+Quantity: 30
+
+Product: Nintendo Switch
+Price: $299.99
+ID: 103
+Quantity: 50
+
+Product: Gaming Mouse Razer DeathAdder
+Price: $69.99
+ID: 104
+Quantity: 100
+
+Product: Gaming Keyboard Logitech G Pro
+Price: $129.99
+ID: 105
+Quantity: 75
+
+Product: Xbox Wireless Controller
+Price: $59.99
+ID: 106
+Quantity: 150
+
+Product: PlayStation DualSense Wireless Controller
+Price: $69.99
+ID: 107
+Quantity: 120
+
+Product: Cyberpunk 2077 (PS5)
+Price: $59.99
+ID: 108
+Quantity: 200
+
+Product: The Last of Us Part II (PS4)
+Price: $39.99
+ID: 109
+Quantity: 180
+
+Product: Call of Duty: Modern Warfare II (Xbox Series X)
+Price: $59.99
+ID: 110
+Quantity: 300

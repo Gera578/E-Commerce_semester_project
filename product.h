@@ -19,35 +19,42 @@ public:
 	Product() {
 		productId = 0;
 		product = "";
-		this->price = 0;
+		price = 0.0;
 		quantity = 0;
 	}
 
-	Product(string pro, int id,  double price, int qty) {
+
+	Product(string pro, int id,  double pr, int qty) {
 		productId = id;
-		product = pro;
-		this->price = price;
+		product = pro.empty() ? "Unknown Product" : pro; 
+		price = pr;
 		quantity = qty;
 	}
+
 	//gets
-	int getID() {
+	int getID() const {
 		return productId;
 	}
 
-	string getProduct() {
+	string getProduct()const {
 		return product; //the name of the product
 	}
 
-	double getPrice() {
+	double getPrice() const {
 		return price;
 	}
 
-	int getQuantity() {
+	int getQuantity() const {
 		return quantity;
 	}
 
 	void setQuantity(int qty) {
 		quantity = qty;
+	}
+
+	//sets
+	void setPrice(double pr) {
+		price = pr; 
 	}
 
 	//for polymorphism, we are going to use it with the class special product
@@ -72,13 +79,21 @@ public:
 	SpecialProduct() {
 		productId = 0;
 		product = "";
-		this->price = 0;
+		price = 0.0;
 		quantity = 0;
 		discount = 0.0;
 	}
 	SpecialProduct( string pro,int id, double price, int qty, double disc)
 		: Product(pro,id,  price, qty), // add the previous class
 		discount(disc) {} //discount = disc
+
+	double getDiscount() {
+		return discount;
+	}
+
+	void setDiscount(double disc) {
+		discount = disc;
+	}
 
 	void display() override {
 		Product::display(); // re-use display function with override
@@ -91,14 +106,13 @@ public:
 		return price * (1 - discount);
 	}
 
-
 };
 
 class Sort {
 public:
 
 	//functions to sort the products
-	void merge(Product s[], int left, int mid, int right, int option) {
+	 void merge(Product s[], int left, int mid, int right, int option) {
 		int lsize = mid - left + 1; //left size
 		int rsize = right - mid; //right size
 
@@ -175,8 +189,7 @@ public:
 		delete[] rightArray;
 	}
 
-
-	void mergeSort(Product s[], int left, int right, int option) {
+	 void mergeSort(Product s[], int left, int right, int option) {
 		int mid;
 		if (left < right) {
 			mid = left + (right - left) / 2;
@@ -187,7 +200,7 @@ public:
 	}
 
 	//function to sort the special products:
-	void merge(SpecialProduct s[], int left, int mid, int right, int option) {
+	 void merge(SpecialProduct s[], int left, int mid, int right, int option) {
 		int lsize = mid - left + 1; //left size
 		int rsize = right - mid; //right size
 
@@ -264,7 +277,6 @@ public:
 		delete[] rightArray;
 	}
 
-
 	void mergeSort(SpecialProduct s[], int left, int right, int option) {
 		int mid;
 		if (left < right) {
@@ -274,8 +286,6 @@ public:
 			merge(s, left, mid, right, option);
 		}
 	}
-
-
 };
 
 #endif // !PRODUCT_H

@@ -1,0 +1,8 @@
+Product: Laptop
+Price: $599.99
+ID: 101
+In stock: 20
+Product: Phone
+Price: $299.99
+ID: 102
+In stock: 22

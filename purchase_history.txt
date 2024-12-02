@@ -1,4 +1,3 @@
-Purchase History for John Doe:
+Purchase History for Gerardo Martin:
 1. Laptop
 2. Phone
-3. Headphones

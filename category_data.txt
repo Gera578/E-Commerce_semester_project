@@ -1,0 +1,5 @@
+Category: Electronics
+Product ID: 101, Name: Laptop, Price: 999.99
+Product ID: 103, Name: Headphones, Price: 199.99
+Product ID: 104, Name: Tablet, Price: 499.99
+Product ID: 105, Name: Smartwatch, Price: 199.99

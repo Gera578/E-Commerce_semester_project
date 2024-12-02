@@ -2,15 +2,15 @@
 #ifndef STORE_H
 #define STORE_H
 
-#include <iostream>
 #include "product.h"
 #include "costumer.h"
+#include <iostream>
 #include <fstream>
 #include <string>
 
 using namespace std;
 class store {
-private:
+protected:
 	Costumer** costumers;
 	Product** inventory; //dynamic array
 	int size; //current size of the inventory
@@ -21,22 +21,23 @@ public:
 
 	// Default constructor
 	store() {
+		capacity = 10;
 		costumers = new Costumer*[10];
 		inventory = new Product*[20]; 
 		size = 0;
-		capacity = 0;
 		earnings = 0.0;
 	}
 
 	// Parameterized constructor
 	store(int size, int initialCapacity = 20) {
-		costumers = new Costumer * [10];
 		this->size = size;
 		capacity = initialCapacity;
 		earnings = 0.0;
+		costumers = new Costumer * [10];
 		inventory = new Product * [capacity];  // Allocate memory for the inventory
 
 	}
+
 
 
 
@@ -108,7 +109,7 @@ public:
 	}
 
 	//Verifies product availability 
-	bool purchase(int id, int quantity) {
+	bool purchase(int id, int quantity, Costumer& costumer) {
 		Product* product = search(id);
 		if (product) {
 			if (product->getQuantity() >= quantity) {
@@ -116,7 +117,14 @@ public:
 				product->setQuantity(product->getQuantity() - quantity);
 				earnings += totalPrice;
 				cout << "Purchase successful! Total: $" << totalPrice << endl;
-				return true;
+				if (costumer.makePurchase(totalPrice)) {
+					cout << "Payment successful! Remaining balance: $" << costumer.getWallet() << endl;
+					return true;
+				}
+				else {
+					cout << "Insufficient funds in wallet!, try to add more money" << endl;
+
+				}
 			}
 			else {
 				cout << "Not enough stock available." << endl;
@@ -128,59 +136,6 @@ public:
 		return false;
 	}
 
-	void processPurchase(int customerId, int productId, int quantity) {
-		// Find the customer by ID
-		Costumer* customer = nullptr;
-		for (int i = 0; i < capacity; i++) {
-			if (costumers[i]->getCostumerId() == customerId) {
-				customer = costumers[i];
-				break;
-			}
-		}
-
-		if (!customer) {
-			cout << "Customer with ID " << customerId << " not found." << endl;
-			return;
-		}
-
-		// Find the product by ID
-		Product* product = nullptr;
-		for (int i = 0; i < size; i++) {
-			if (inventory[i]->getID() == productId) {
-				product = inventory[i];
-				break;
-			}
-		}
-
-		if (!product) {
-			cout << "Product with ID " << productId << " not found." << endl;
-			return;
-		}
-
-		// Check product availability
-		if (product->getQuantity() < quantity) {
-			cout << "Not enough stock for product: " << product->getProduct() << endl;
-			return;
-		}
-
-		// Calculate total price
-		double totalPrice = product->getPrice() * quantity;
-
-		// Check customer balance
-		if (!customer->makePurchase(totalPrice)) {
-			cout << "Customer " << customer->getName() << " does not have enough balance." << endl;
-			return;
-		}
-
-		// Process the purchase
-		product->setQuantity(product->getQuantity() - quantity);
-        string item = product->getProduct() + " x" + to_string(quantity);
-        customer->addPurchase(item);
-		earnings += totalPrice;
-
-		cout << "Purchase successful! " << customer->getName()
-			<< " bought " << quantity << " of " << product->getProduct() << endl;
-	}
 
 	//function to sell a product, it checks if there's enough stock, updates the stock
 	void sellProduct(int productId, int quantity) {
@@ -202,15 +157,24 @@ public:
 
 
 	//function to display elements vailable
-	void displayAvailable() {
+	virtual void displayAvailable() {
 		for (int i = 0; i < size; i++) {
-			inventory[i]->display();
-			cout << "------------------\n";
+			if (inventory[i] != nullptr) {
+				cout << "Product: " << inventory[i]->getProduct() << "\n"
+					<< "ID: " << inventory[i]->getID() << "\n"
+					<< "Price: $" << inventory[i]->getPrice() << "\n"
+					<< "Quantity: " << inventory[i]->getQuantity() << "\n"
+					<< "---------------------------" << endl;
+
+			}
+			else {
+				cout << "Inventory slot " << i << " is empty." << endl;
+			}
 		}
 	}
 
 	//function to get information from a file
-	void loadInventory(string& filename) {
+	virtual void loadInventory(string& filename) {
 		ifstream file(filename);
 		if (!file) {
 			cerr << "Error opening file!" << endl;
@@ -247,7 +211,7 @@ public:
 	}
 
 	//function to save the infromation in a file
-	void saveInventory(string& filename) {
+	virtual void saveInventory(string& filename) {
 		ofstream file(filename);
 
 		for (int i = 0; i < size; i++) {
@@ -261,11 +225,99 @@ public:
 	}
 
 	//function to write on a file the sales report
-	void salesReport(string& filename) {
+	virtual void salesReport(string& filename) {
 		ofstream file(filename);
 		file << "Total Revenue: $" << earnings << endl;
 		file.close();
 	}
 
 };
+
+class bestBuy : public store {
+private:
+public:
+	bestBuy() : store() {}
+
+	// Apply a discount to a specific product by ID
+	void applyDiscount(int productId, double discountPercentage) {
+		for (int i = 0; i < size; i++) {
+			if (inventory[i]->getID() == productId) {
+				SpecialProduct* sp = dynamic_cast<SpecialProduct*>(inventory[i]);
+				if (sp) {
+					sp->setDiscount(discountPercentage / 100.0); // Convert to fractional form
+					cout << "Discount of " << discountPercentage << "% applied to product ID " << productId << endl;
+				}
+				else {
+					cout << "Product with ID " << productId << " is not a special product.\n";
+				}
+				return;
+			}
+		}
+		cout << "Product with ID " << productId << " not found.\n";
+	}
+
+
+    void rewardLoyaltyPoints(Costumer* customer, double amountSpent) {
+        if (customer) {
+            int points = static_cast<int>(amountSpent / 10); // 1 point per $10 spent
+            customer->addLoyaltyPoints(points);
+            cout << "Rewarded " << points << " points to customer: " << customer->getName() << endl;
+        }
+        else {
+            cout << "Customer not found!\n";
+        }
+    }
+
+
+	// Display products on promotion
+	void displayPromotions() {
+		cout << "Promotional Products:\n";
+		for (int i = 0; i < size; i++) {
+			SpecialProduct* sp = dynamic_cast<SpecialProduct*>(inventory[i]);
+			if (sp && sp->getDiscount() > 0.0) {
+				sp->display();
+				cout << "-----------------------\n";
+			}
+		}
+	}
+
+	void useStoreFeatures(string name, int id, double price) {
+		// Inherited functions
+		addProduct(new Product(name, 101, 599.99, 15));
+		sellProduct(101, 2);
+		string filename = "inventory.txt";
+		saveInventory(filename);
+		cout << "Inventory saved to file.\n";
+	}
+
+	// Overridden display function to show all inventory
+	void displayAvailable() override {
+		cout << "Best Buy Inventory:\n";
+		for (int i = 0; i < size; i++) {
+			if (inventory[i] != nullptr) {
+				inventory[i]->display();
+				cout << "-----------------------\n";
+			}
+		}
+	}
+};
+
+class Gamestop : public store {
+public:
+    Gamestop() : store() {}
+
+    // You can also add new methods specific to Gamestop, like adding promotions or discounts
+    void applyDiscount(int productId, double discountPercentage) {
+        Product* product = search(productId);
+        if (product) {
+            double discountedPrice = product->getPrice() * (1 - discountPercentage / 100);
+            product->setPrice(discountedPrice);
+            cout << "Discount applied! New price for " << product->getProduct() << ": $" << discountedPrice << endl;
+        }
+        else {
+            cout << "Product not found." << endl;
+        }
+    }
+};
+
 #endif // !STORE_H

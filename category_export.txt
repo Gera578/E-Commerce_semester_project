@@ -1,0 +1,5 @@
+Category: Electronics
+Product ID: 101, Name: Laptop, Price: -9.25596e+61
+Product ID: 102, Name: Smartphone, Price: -9.25596e+61
+Product ID: 103, Name: Headphones, Price: -9.25596e+61
+Product ID: 104, Name: Tablet, Price: -9.25596e+61

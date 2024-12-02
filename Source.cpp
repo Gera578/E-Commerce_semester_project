@@ -1,27 +1,42 @@
 #include <iostream>
-#include "Store.h"
+#include <string>
+#include "Category.h"
 #include "costumer.h"
 #include "Order.h"
 #include "product.h"
-#include "Category.h"
+#include "Store.h"
 
 using namespace std;
 
 int main() {
-    // Create a Costumer object
-    Costumer customer("John Doe", 150.00, 101);
+    Order<Product> order1;
 
-    // Add purchases
+    // Load products from a file
+    string filename = "gamestop_inventory.txt"; // Make sure this file exists and has valid data
+    order1.loadInventory(filename); // This will load products into the order
 
-    customer.addPurchase("Laptop");
-    customer.addPurchase("Phone");
-    customer.addPurchase("Headphones");
+    // Display the orders in the list after loading
+    cout << "Displaying all orders:" << endl;
+    order1.displayOrder();
 
-    // Test the overloaded << operator
-    cout << customer << endl;
+    // Sort products by price in ascending order
+    cout << "\nSorting products by price (ascending)..." << endl;
+    order1.sortOrder(1);  // Call the sortByPrice method
 
-    // Export the purchase history
-    customer.exportPurchaseHistory("purchase_history.txt");
+    // Display the sorted orders
+    cout << "Displaying sorted orders:" << endl;
+    order1.displayOrder();
+
+    // Save sorted orders to a file
+    string outputFilename = "order_sorted.txt";
+    order1.saveToFile(outputFilename);
+
+    // Load orders from the saved file
+    order1.loadInventory(outputFilename);
+
+    // Display the loaded orders
+    cout << "\nDisplaying orders after loading from file:" << endl;
+    order1.displayOrder();
 
     return 0;
 }
