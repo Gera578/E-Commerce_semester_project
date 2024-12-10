@@ -15,24 +15,28 @@ protected:
 	double price;
 	int quantity;
 
+	int pointsRequired;
+
 public:
 	Product() {
 		productId = 0;
 		product = "";
 		price = 0.0;
 		quantity = 0;
+		pointsRequired = 0;
 	}
 
 
 	Product(string pro, int id,  double pr, int qty) {
 		productId = id;
-		product = pro.empty() ? "Unknown Product" : pro; 
+		product = pro;
 		price = pr;
 		quantity = qty;
+		pointsRequired = 0;
 	}
 
 	//gets
-	int getID() const {
+	int getID() {
 		return productId;
 	}
 
@@ -48,6 +52,10 @@ public:
 		return quantity;
 	}
 
+	int getPointsRequired() {
+		return pointsRequired;
+	}
+
 	void setQuantity(int qty) {
 		quantity = qty;
 	}
@@ -56,6 +64,44 @@ public:
 	void setPrice(double pr) {
 		price = pr; 
 	}
+
+	void displayProductsForPoints(Product** products, int size, int userPoints) {
+		cout << "Products you can purchase with your points (" << userPoints << " points available):\n";
+		for (int i = 0; i < size; ++i) {
+			if (products[i]->getPointsRequired() <= userPoints && products[i]->getQuantity() > 0) {
+				cout << products[i]->getID() << ". " << products[i]->getProduct()
+					<< " - " << products[i]->getPointsRequired() << " points"
+					<< " (" << products[i]->getQuantity() << " in stock)\n";
+			}
+		}
+	}
+
+	void purchaseWithPoints(Product** products, int size, int& userPoints) {
+		displayProductsForPoints(products, size, userPoints);
+
+		cout << "Enter the ID of the product you want to purchase: ";
+		int productId;
+		cin >> productId;
+
+		for (int i = 0; i < size; ++i) {
+			if (products[i]->getID() == productId) {
+				if (products[i]->getQuantity() > 0 && products[i]->getPointsRequired() <= userPoints) {
+					userPoints -= products[i]->getPointsRequired();
+					products[i]->setQuantity(products[i]->getQuantity() - 1);
+					cout << "You purchased " << products[i]->getProduct() << "! Remaining points: " << userPoints << endl;
+				}
+				else if (products[i]->getQuantity() == 0) {
+					cout << "Sorry, " << products[i]->getProduct() << " is out of stock.\n";
+				}
+				else {
+					cout << "You do not have enough points for " << products[i]->getProduct() << ".\n";
+				}
+				return;
+			}
+		}
+		cout << "Invalid product ID.\n";
+	}
+
 
 	//for polymorphism, we are going to use it with the class special product
 	virtual void display() {
@@ -71,7 +117,7 @@ public:
 
 //class for prodducts that contain a discount
 class SpecialProduct : public Product{ //inheritance to the class Product
-private:
+protected:
 	double discount;
 
 public:
@@ -103,7 +149,7 @@ public:
 	}
 
 	double getFinalPrice() {
-		return price * (1 - discount);
+		return price * (price * discount / 100.00);
 	}
 
 };
@@ -112,91 +158,81 @@ class Sort {
 public:
 
 	//functions to sort the products
-	 void merge(Product s[], int left, int mid, int right, int option) {
-		int lsize = mid - left + 1; //left size
-		int rsize = right - mid; //right size
+	void merge(Product products[], int left, int mid, int right, int sortOption) {
+		int n1 = mid - left + 1;
+		int n2 = right - mid;
 
-		//temporary subarrays
-		Product* leftArray = new Product[lsize];
-		Product* rightArray = new Product[rsize];
+		Product* leftArray = new Product[n1];
+		Product* rightArray = new Product[n2];
 
-		//we copy the data to the temporary arrays:
+		// Copy data into temporary arrays
+		for (int i = 0; i < n1; i++) leftArray[i] = products[left + i];
+		for (int i = 0; i < n2; i++) rightArray[i] = products[mid + 1 + i];
 
-		//left array
-		for (int i = 0; i < lsize; i++) {
-			leftArray[i] = s[left + i];
-		}
+		int i = 0, j = 0, k = left;
+		while (i < n1 && j < n2) {
+			bool conditionMet = false;
 
-		//right array
-		for (int j = 0; j < rsize; j++) {
-			rightArray[j] = s[mid + 1 + j];
-		}
-
-		//i and j keeps track of the two subarrays
-		int i = 0; //i for the left
-		int j = 0; //j for the right
-		int k = left; //original array (s)
-
-		while (i < lsize && j < rsize) {
-			bool conidtion = false;
-			switch (option) {
-			case 1:
-				conidtion = leftArray[i].getPrice() <= rightArray[j].getPrice();
+			// Sort based on the chosen option
+			switch (sortOption) {
+			case 1: // Price Ascending
+				conditionMet = leftArray[i].getPrice() <= rightArray[j].getPrice();
 				break;
-			case 2:
-				conidtion = leftArray[i].getPrice() >= rightArray[j].getPrice();
+			case 2: // Price Descending
+				conditionMet = leftArray[i].getPrice() >= rightArray[j].getPrice();
 				break;
-			case 3:
-				conidtion = leftArray[i].getProduct() <= rightArray[j].getProduct();
+			case 3: // By Name
+				conditionMet = leftArray[i].getProduct() <= rightArray[j].getProduct();
 				break;
-			case 4:
-				conidtion = leftArray[i].getQuantity() <= rightArray[j].getQuantity();
+			case 4: // Quantity Ascending
+				conditionMet = leftArray[i].getQuantity() <= rightArray[j].getQuantity();
+				break;
+			case 5: // ID Ascending
+				conditionMet = leftArray[i].getQuantity() <= rightArray[j].getID();
 				break;
 			default:
-				cout << "invalid option";
+				cout << "Invalid option\n";
 				break;
 			}
-			if (conidtion) {
 
-				s[k] = leftArray[i];
-				i++; //let's go to next element on the left side...
+			if (conditionMet) {
+				products[k] = leftArray[i];
+				i++;
 			}
 			else {
-				s[k] = rightArray[j];
-				j++; //let's go to next element on the right side...
+				products[k] = rightArray[j];
+				j++;
 			}
-			k++; //let's go to next element on the original array...
+			k++;
 		}
 
-		// Copy the remaining elements of leftArray, 
-		// if there are any
-		while (i < lsize) {
-			s[k] = leftArray[i];
+		// Copy any remaining elements of leftArray[]
+		while (i < n1) {
+			products[k] = leftArray[i];
 			i++;
 			k++;
 		}
 
-		// Copy the remaining elements of rightArray, 
-		// if there are any
-		while (j < rsize) {
-			s[k] = rightArray[j];
+		// Copy any remaining elements of rightArray[]
+		while (j < n2) {
+			products[k] = rightArray[j];
 			j++;
 			k++;
 		}
 
-		//Free allocated memory
 		delete[] leftArray;
 		delete[] rightArray;
 	}
 
-	 void mergeSort(Product s[], int left, int right, int option) {
-		int mid;
-		if (left < right) {
-			mid = left + (right - left) / 2;
-			mergeSort(s, left, mid, option);
-			mergeSort(s, mid + 1, right, option);
-			merge(s, left, mid, right, option);
-		}
+	void mergeSort(Product products[], int left, int right, int sortOption) {
+		if (left >= right) return;  // Base case for recursion
+
+		int mid = left + (right - left) / 2;
+
+		mergeSort(products, left, mid, sortOption);
+		mergeSort(products, mid + 1, right, sortOption);
+
+		merge(products, left, mid, right, sortOption);
 	}
 
 	//function to sort the special products:
@@ -286,6 +322,8 @@ public:
 			merge(s, left, mid, right, option);
 		}
 	}
+
+
 };
 
 #endif // !PRODUCT_H

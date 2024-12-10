@@ -46,6 +46,7 @@ public:
 		if (size == capacity) {
 			// Double the capacity of the array
 			capacity *= 2;
+		}
 
 			// Create a new array with the increased capacity
 			Product** newCapacity = new Product * [capacity];
@@ -60,7 +61,6 @@ public:
 
 			// Point the product array to the new, larger array
 			product = newCapacity;
-		}
 
 		// Add the new product at the end of the array
 		product[size] = new Product(newProduct);  // Create a new Product object
@@ -117,19 +117,6 @@ public:
 		return NULL;
 	}
 
-	//similar than search by ID, but with name
-	Product* search(string& name) {
-		for (int i = 0; i < size; i++) {
-			if (product[i]->getProduct() == name)//we can access to the function getID from Product
-			{
-				return product[i];
-			}
-		}
-
-		cout << "Product with the name '" << name << "' not found\n";
-		return NULL;
-	}
-
 	//returns the average price of the category
 	double averagePrice() {
 		if (size == 0) return 0.0;
@@ -141,42 +128,6 @@ public:
 		return totalPrice / size;
 	}
 
-	//find the most expesive product
-	Product* mostExpensiveProduct() {
-		if (size == 0) return nullptr;
-
-		Product* maxProduct = product[0];
-		for (int i = 1; i < size; i++) {
-			if (product[i]->getPrice() > maxProduct->getPrice()) {
-				maxProduct = product[i];
-			}
-		}
-		return maxProduct;
-	}
-
-	//find the cheapest product
-	Product* leastExpensiveProduct() {
-		if (size == 0) return nullptr;
-
-		Product* minProduct = product[0];
-		for (int i = 1; i < size; i++) {
-			if (product[i]->getPrice() < minProduct->getPrice()) {
-				minProduct = product[i];
-			}
-		}
-		return minProduct;
-	}
-
-	// Overload the << operator for easy printing of customer information.
-	friend ostream& operator<<(ostream& os, Category& category) {
-		os << "Category: " << category.name << endl;
-		for (int i = 0; i < category.size; i++) {
-			os << i + 1 << ". " << category.product[i]->getProduct() << " (ID: "
-				<< category.product[i]->getID() << ", Price: $"
-				<< category.product[i]->getPrice() << ")\n";
-		}
-		return os;
-	}
 
 	//function to get information from a file
 	void loadFromFile(string& filename) {
@@ -207,28 +158,11 @@ public:
 		cout << "Category loaded from " << filename << endl;
 	}
 
-	//export to a file the catgeories
-	void exportToFile( string& filename) {
-		ofstream outFile(filename);
-		if (!outFile) {
-			cout << "Error opening file for export.\n";
-			return;
-		}
-		outFile << "Category: " << name << endl;
-		for (int i = 0; i < size; i++) {
-			outFile << "Product ID: " << product[i]->getID()
-				<< ", Name: " << product[i]->getProduct()
-				<< ", Price: " << product[i]->getPrice() << endl;
-		}
-		outFile.close();
-		cout << "Category exported to " << filename << endl;
-	}
-
 	//function to return the total value of all the products in certain category
 	double getTotalValue() {
 		double total = 0.0;
 		for (int i = 0; i < size; i++) {
-			total += product[i]->getPrice() * product[i]->getQuantity();
+			total += product[i]->getPrice();
 		}
 		return total;
 	}
@@ -238,7 +172,7 @@ public:
 		cout << "Category: " << name << endl;
 		for (int i = 0; i < size; i++) {
 			product[i]->display();
-			cout << endl;
+			cout << "-----------------------\n";
 		}
 	}
 
@@ -249,6 +183,7 @@ public:
 	int getSize() {
 		return size;
 	}
+
 };
 
 #endif // !CAREGORY_H

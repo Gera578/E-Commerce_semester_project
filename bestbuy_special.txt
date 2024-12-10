@@ -1,0 +1,14 @@
+Product: MacBook pro
+Price: $1099.99
+ID: 101
+In stock: 18
+
+Product: Google pixel 8
+Price: $499.99
+ID: 102
+In stock: 15
+
+Product: Samsung s24 FE
+Price: $999.99
+ID: 105
+In stock: 15

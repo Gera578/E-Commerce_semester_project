@@ -1,42 +1,43 @@
-Category Name
-10
+Category: Videogames
+Number of elements in the file: 10
+
 The Last of Us Part II (PS4)
 $39.99
-180
+180Elements in stock
 ---------------
 Xbox Wireless Controller
 $59.99
-150
+150Elements in stock
 ---------------
 Cyberpunk 2077 (PS5)
 $59.99
-200
+200Elements in stock
 ---------------
 Call of Duty: Modern Warfare II (Xbox Series X)
 $59.99
-300
+300Elements in stock
 ---------------
 Gaming Mouse Razer DeathAdder
 $69.99
-100
+100Elements in stock
 ---------------
 PlayStation DualSense Wireless Controller
 $69.99
-120
+120Elements in stock
 ---------------
 Gaming Keyboard Logitech G Pro
 $129.99
-75
+75Elements in stock
 ---------------
 Nintendo Switch
 $299.99
-50
+50Elements in stock
 ---------------
 Xbox Series X
 $499.99
-25
+25Elements in stock
 ---------------
 PlayStation 5
 $499.99
-30
+30Elements in stock
 ---------------

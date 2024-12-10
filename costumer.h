@@ -3,7 +3,7 @@
 #ifndef COSTUMER_H
 #define COSTUMER_H
 
-
+#include "product.h"
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -30,8 +30,9 @@ public:
 		loyaltyPoints = 0;
 
 		purchaseCount = 0;
-		capacity = 5;
+		capacity = 1;
 		purchaseHistory = new string[capacity];
+
 	}
 
 	Costumer(string nam, double balance, int id) {
@@ -91,13 +92,16 @@ public:
 		}
 	}
 
+	int getLoyaltyPoints() {
+		return loyaltyPoints;
+	}
+
+	void deductLoyaltyPoints(int points) {
+		loyaltyPoints -= points;
+	}
+
 
 	bool makePurchase(double amount) {
-
-		if (this == nullptr) {
-			cout << "Invalid customer object.\n";
-			return false;
-		}
 
 		if (wallet >= amount) {
 			wallet -= amount;
@@ -107,7 +111,7 @@ public:
 		return false;
 	}
 	
-	void addPurchase( string item) {
+	void addPurchase(string item) {
 		// Initialize purchaseHistory if it's null
 		if (purchaseHistory == nullptr) {
 			purchaseHistory = new string[capacity]; // Initial allocation if not done
@@ -130,16 +134,18 @@ public:
 		purchaseCount++;
 	}
 
+
 	void removePurchase(int index) {
 		if (index < 0 || index >= purchaseCount) {
 			cout << "Invalid item\n";
 			return;
 		}
+
 		// Move the last item to the 'deleted' index
 		purchaseHistory[index] = purchaseHistory[purchaseCount - 1];
 		purchaseCount--;
-	}
 
+	}
 
 	bool searchPurchase(string item) {
 		for (int i = 0; i < purchaseCount; i++) {
@@ -191,6 +197,7 @@ public:
 		outFile << "Customer Information for " << name << endl;
 		outFile << "Wallet Balance: $" << wallet << endl;
 		outFile << "Total Purchases: " << purchaseCount << endl;
+
 		outFile.close();
 		cout << "Customer information exported to " << filename << endl;
 	}
@@ -211,10 +218,20 @@ public:
 
 	void displayPurchaseHistory() {
 		cout << "Purchase History for " << name << ":" << endl;
+
+		if (purchaseCount == 0) {
+			cout << "No purchases found." << endl;
+			return;
+		}
+
 		for (int i = 0; i < purchaseCount; i++) {
-			cout << i + 1 << ". " << purchaseHistory[i] << endl;
+			// Check for null or invalid entries, if necessary
+			if (purchaseHistory[i] != "") {
+				cout << i + 1 << ". " << purchaseHistory[i] << endl;
+			}
 		}
 	}
+
 
 };
 #endif // !COSTUMER_H

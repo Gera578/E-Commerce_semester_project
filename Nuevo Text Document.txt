@@ -1,40 +1,40 @@
 Product: MacBook pro
-Price: $1099.99
+points: $10000
 ID: 101
 In stock: 18
 
 Product: Google pixel pro 9
-Price: $499.99
+points: 1000
 ID: 102
 In stock: 15
 
 Product: Samsung s24 ultra
-Price: $999.99
+points: 1000
 ID: 105
 In stock: 15
 
 Product: iPhone 15 pro max
-Price: $999.99
+points: 1000
 ID: 107
 In stock: 12
 
 Product: GPU Nvdia RTX 4090
-Price: $899.99
+points: 8000
 ID: 108
 In stock: 4
 
 Product: CPU AMD Ryzen 7 7700x
-Price: $299.99
+points: 20
 ID: 109
 In stock: 15
 
 Product: PC Gamer AMD Ryzen 5 500 Radeon RX 6400
-Price: $649.99
+points: 950
 ID: 110
 In stock: 10
 
 Product: PC Gamer Intel Core i5-13400F 2.5GHz, GeForce RTX 4060 
-Price: $897.65
+points: 1987
 ID: 111
 In stock: 18
 

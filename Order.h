@@ -106,8 +106,6 @@ public:
 		}
 	}
 
-
-	//adds an order to the order
 	//adds an order to the order
 	void addOrder(T& data) {
 		Node<T>* newNode = new Node<T>(data);
@@ -170,18 +168,6 @@ public:
 		size = 0;
 	}
 
-	bool updateOrder(int orderId, const T& data) {
-		Node<T>* ptr = head;
-		while (ptr) {
-			if (ptr->order.getID() == orderId) { 
-				ptr->order = data; // Make sure T has the correct assignment operator
-				return true;
-			}
-			ptr = ptr->next;
-		}
-		return false;
-	}
-
 
 	void sortOrder(int option) {
 		if (!head || size <= 1) {
@@ -194,15 +180,18 @@ public:
 
 	//returns the average price of the order
 	double averagePrice() {
-		if (products == nullptr || size == 0) {
+		if (head == nullptr || size == 0) {
 			return 0.0; // Return 0 if there are no products
 		}
 		double totalPrice = 0;
-		for (int i = 0; i < size; i++) {
-			totalPrice += products[i]->getPrice();
+		Node<T>* current = head;
+		while (current != nullptr) {
+			totalPrice += current->order.getPrice();
+			current = current->next;
 		}
 		return totalPrice / size;
 	}
+
 
 
 	//function to get information from a file
@@ -256,7 +245,7 @@ public:
 	}
 
 	//function to export the order to a file
-	void saveToFile( string& filename, string categoryName) {
+	void saveToFile( string& filename) {
 		ofstream outFile(filename);
 		if (!outFile) {
 			cerr << "Error: Could not open file for saving: " << filename << endl;
@@ -264,10 +253,9 @@ public:
 		}
 
 		// Write category name 
-		outFile << categoryName << endl;
 
 		// Write size
-		outFile << size << endl;
+		outFile << "Number of elements in the file: " << size << endl << endl;
 
 		// Write product details
 		Node<T>* current = head;
@@ -275,7 +263,7 @@ public:
 			const T& product = current->order; // Get the product from the current node
 			outFile << product.getProduct() << "\n$"
 				<< product.getPrice() << "\n"
-				<< product.getQuantity() << endl;
+				<< product.getQuantity()<<" Elements in stock" << endl;
 			outFile << "---------------\n";
 			current = current->next;
 		}
@@ -324,12 +312,25 @@ public:
 		// Custom sorting condition based on the option
 		bool condition = false;
 		switch (option) {
-		case 1: condition = left->order.getPrice() <= right->order.getPrice(); break;
-		case 2: condition = left->order.getPrice() >= right->order.getPrice(); break;
-		case 3: condition = left->order.getProduct() <= right->order.getProduct(); break;
-		case 4: condition = left->order.getQuantity() <= right->order.getQuantity(); break;
+		case 1: 
+			condition = left->order.getPrice() <= right->order.getPrice();//cheapest
+			break;
+		case 2: 
+			condition = left->order.getPrice() >= right->order.getPrice(); //more expensive
+			break;
+		case 3: 
+			condition = left->order.getProduct() <= right->order.getProduct(); //name
+			break;
+		case 4: 
+			condition = left->order.getQuantity() <= right->order.getQuantity(); //less quantity
+			break;
+
+		case 5:
+			condition = left->order.getID() <= right->order.getID(); //lowest id
+			break;
+
 		default:
-			std::cerr << "Invalid sorting option!" << std::endl;
+			cerr << "Invalid sorting option!" << endl;
 			return nullptr;
 		}
 
