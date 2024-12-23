@@ -1,3 +1,5 @@
+//Store class where we define the behavior of a the Store, adding other classes like game stop and best buy as derivated classes
+
 #pragma once
 #ifndef STORE_H
 #define STORE_H
@@ -134,7 +136,8 @@ public:
 		if (product) {
 			if (product->getQuantity() >= quantity) {
 				double totalPrice = product->getPrice() * quantity;
-				product->setQuantity(product->getQuantity() - quantity);
+				int quantityUpdated = product->getQuantity() - quantity;
+				product->setQuantity(quantityUpdated);
 				earnings += totalPrice;
 				cout << "Purchase successful! Total: $" << totalPrice << endl;
 				if (costumer.makePurchase(totalPrice)) {
@@ -324,8 +327,6 @@ public:
 			}
 		}
 	}
-
-
 
 };
 

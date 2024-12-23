@@ -1,3 +1,5 @@
+//This class works along the product class, it makes categories on products and gets information about certain category
+
 #pragma once
 #ifndef CAREGORY_H
 #define CATEGORY_H

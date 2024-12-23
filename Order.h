@@ -1,3 +1,4 @@
+//this file shows to the user its order, and gives it control to see what have been bought
 #pragma once
 #ifndef ORDER_H
 #define ORDER_H
@@ -93,18 +94,6 @@ public:
 		return nullptr;
 	}
 
-	//something like sorting, this function shows just the orders in a range of prices
-	void filterByPrice(double min, double max) {
-		cout << "Products in price range " << min << "-" << max << ": " << endl;
-		Node<T>* current = head;
-		while (current != nullptr) {
-			if (current->order.getPrice() >= min && current->order.getPrice() <= max) {
-				current->order.display();
-				cout << "------------------" << endl;
-			}
-			current = current->next;
-		}
-	}
 
 	//adds an order to the order
 	void addOrder(T& data) {
@@ -190,58 +179,6 @@ public:
 			current = current->next;
 		}
 		return totalPrice / size;
-	}
-
-
-
-	//function to get information from a file
-	void loadInventory(const string& filename) {
-		ifstream file(filename);
-		if (!file) {
-			cerr << "Error opening file!" << endl;
-			return;
-		}
-
-		string line;
-		string productName;
-		int id = 0, quantity = 0;
-		double price = 0.0;
-		double discount = 0.0;
-
-		while (getline(file, line)) {
-			// If the line starts with "Product:", it means we've found a new product entry
-			if (line.find("Product:") != string::npos) {
-				// Extract product name (skip the "Product: " part)
-				productName = line.substr(line.find(":") + 2);
-
-				// Read the next line for price (expect "$" sign before price)
-				getline(file, line); // Price
-				price = stod(line.substr(line.find("$") + 1));
-
-				// Read the next line for ID
-				getline(file, line); // ID
-				id = stoi(line.substr(line.find(":") + 2));
-
-				// Read the next line for quantity
-				getline(file, line); // Quantity
-				quantity = stoi(line.substr(line.find(":") + 2));
-
-				// Optional: Read discount (if available)
-				// If there's a discount line, you can read it too, otherwise skip
-				if (getline(file, line) && line.find("Discount:") != string::npos) {
-					discount = stod(line.substr(line.find(":") + 2)); // If there's a discount, parse it
-				}
-				else {
-					discount = 0.0;  // No discount if line is absent
-				}
-
-				// Add the product to the inventory (assuming addOrder is correct)
-				Product newProduct(productName, id, price, quantity);
-				addOrder(newProduct);  // Assuming addOrder takes Product objects (not pointers)
-			}
-		}
-
-		file.close();
 	}
 
 	//function to export the order to a file
@@ -363,18 +300,24 @@ public:
 		return merge(left, right, option);
 	}
 
-	Node<T>* getMiddle(Node<T>* head) {
-		if (!head) return head;
+    Node<T>* getMiddle(Node<T>* head) {
+    // If the list is empty, return the head (which is nullptr)
+    if (!head) 
+		return head;
 
-		Node<T>* slow = head;
-		Node<T>* fast = head;
+    // Initialize two pointers, slow and fast
+    Node<T>* slow = head;
+    Node<T>* fast = head;
 
-		while (fast->next && fast->next->next) {
-			slow = slow->next;
-			fast = fast->next->next;
-		}
-		return slow;
-	}
+    // Move fast pointer two steps and slow pointer one step at a time
+    // When fast reaches the end, slow will be at the middle
+    while (fast->next && fast->next->next) {
+		slow = slow->next;
+		fast = fast->next->next;
+    }
+    // Return the slow pointer, which is now at the middle of the list
+    return slow;
+    }
 
 
 };

@@ -1,3 +1,6 @@
+//Product class where the products are defined and used.
+//This file also includes the mergeSort algorithm to sort products by: cheapest, expensive, name, less quantity, id
+
 #pragma once
 #ifndef PRODUCT_H
 #define PRODUCT_H

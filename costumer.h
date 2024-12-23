@@ -1,3 +1,5 @@
+//Class to perfom the behavior of the costumer, with functions like make purchase, add balance, loyalty points, export to file, etc
+
 #pragma once
 
 #ifndef COSTUMER_H
@@ -162,16 +164,6 @@ public:
 		purchaseCount = 0;
 		cout << "Purchase history cleared!" << endl;
 	}
-
-	// Overload the << operator for easy printing of customer information.
-	friend ostream& operator<<(ostream& os, const Costumer& costumer) {
-		os << "Costumer ID: " << costumer.costumerId
-			<< ", Name: " << costumer.name
-			<< ", Wallet Balance: $" << costumer.wallet;
-		return os;
-	}
-
-
 
 	// Function to export the purchase history to a file
 	void exportPurchaseHistory(const string& filename) {

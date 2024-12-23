@@ -1,3 +1,9 @@
+//Edgar Gerardo Martin Milan
+//December 10th, 2024
+//Semester project
+//we use every function and class used in the other files to simulate an eCommerce
+
+
 #include <iostream>
 #include <string>
 #include "Category.h"
@@ -18,7 +24,7 @@ int main() {
     Category videogamesCategory("Videogames");
 
     string name;
-    double wallet = 1000.00; ///initial balance of a thousand dollars
+    double wallet = 100000.00; ///initial balance of a thousand dollars
     Costumer costumer("Gera", wallet, 1);
 
     Product* foundProduct = nullptr;
@@ -81,6 +87,7 @@ int main() {
     ///////////////////////////////////////////
     int role = 0;//to know if the test will run as costumer or admin
     int adminChoice = 0;
+    int paymentChoice = 0; 
 
     while (true) {
         system("cls");
@@ -106,10 +113,13 @@ int main() {
                 bought = false;
                 while (bought == false) {
 
+                    cout << "Enter '-1' to exit\n";
                     //if the user enters any other number that is not 1, it will continue and display it unsorted
                     cout << "Do you want to sort the products? yes[1] no[2]\n";
                     cin >> toSort;
-
+                    if (toSort == -1) {
+                        break;
+                    }
                     if (toSort == 1) {
                         cout << "Options to sort:\n[1] Cheapest firsts\n[2] Expensive first\n[3] By name\n[4] By less quantity\n[5] By ID\n";
                         cin >> sortOption;
@@ -175,14 +185,13 @@ int main() {
                         if (costumer.getWallet() >= foundProduct->getPrice() || costumer.getLoyaltyPoints() >= foundProduct->getPointsRequired()) {
                             cout << "You have enough funds or loyalty points to purchase this product!\n";
                             cout << "Choose your payment method:\n1. Wallet\n2. Loyalty Points\nEnter your choice: ";
-                            int paymentChoice;
                             cin >> paymentChoice;
 
                             if (paymentChoice == 1) { // Wallet purchase
                                 if (costumer.getWallet() >= foundProduct->getPrice()) {
                                     // Proceed with wallet purchase
                                     cout << "Enter the quantity of the products to buy: "; cin >> quantity;
-                                    bestbuy.sellProduct(foundProduct->getID(), quantity);
+                                    
                                     if (bestbuy.purchase(foundProduct->getID(), quantity, costumer)) {
                                         cout << "Great! Your order has been saved.\n";
                                         cout << "This is your current wallet balance: $" << costumer.getWallet() << endl;
@@ -247,7 +256,6 @@ int main() {
             case 2://FOR GAME STOP
                 cout << "Welcome to Game Stop!, These are our products available: \n";
                 gs.loadInventory(gameFile, gsProduct, product_count, max);
-                //category.loadFromFile(categoryFile);
 
                 for (int i = 0; i < product_count; i++) {
                     gsProduct[i].display();
